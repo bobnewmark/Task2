@@ -1,5 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
+import symonenko.task2.Item;
 import symonenko.task2.ShoppingCart;
 
 public class AppendFormattedTest extends junit.framework.TestCase {
@@ -9,10 +10,10 @@ public class AppendFormattedTest extends junit.framework.TestCase {
     @Before
     public void setUp() {
         cart = new ShoppingCart();
-        cart.addItem("Apple", 0.99, 5, ShoppingCart.ItemType.NEW);
-        cart.addItem("Banana", 20.00, 4, ShoppingCart.ItemType.SECOND_FREE);
-        cart.addItem("A long piece of toilet paper", 17.20, 1, ShoppingCart.ItemType.SALE);
-        cart.addItem("Nails", 2.00, 500, ShoppingCart.ItemType.REGULAR);
+        cart.addItem("Apple", 0.99, 5, Item.ItemType.NEW);
+        cart.addItem("Banana", 20.00, 4, Item.ItemType.SECOND_FREE);
+        cart.addItem("A long piece of toilet paper", 17.20, 1, Item.ItemType.SALE);
+        cart.addItem("Nails", 2.00, 500, Item.ItemType.REGULAR);
     }
 
     @Test

@@ -1,16 +1,17 @@
 package symonenko.task2;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.text.*;
 
 /**
  * Containing items and calculating price.
  */
 public class ShoppingCart {
-    public static enum ItemType {NEW, REGULAR, SECOND_FREE, SALE}
+
+    /**
+     * Container for added items
+     */
+    private List<Item> items = new ArrayList<>();
 
     /**
      * Tests all class methods.
@@ -18,10 +19,10 @@ public class ShoppingCart {
     public static void main(String[] args) {
 // TODO: add tests here
         ShoppingCart cart = new ShoppingCart();
-        cart.addItem("Apple", 0.99, 5, ItemType.NEW);
-        cart.addItem("Banana", 20.00, 4, ItemType.SECOND_FREE);
-        cart.addItem("A long piece of toilet paper", 17.20, 1, ItemType.SALE);
-        cart.addItem("Nails", 2.00, 500, ItemType.REGULAR);
+        cart.addItem("Apple", 0.99, 5, Item.ItemType.NEW);
+        cart.addItem("Banana", 20.00, 4, Item.ItemType.SECOND_FREE);
+        cart.addItem("A long piece of toilet paper", 17.20, 1, Item.ItemType.SALE);
+        cart.addItem("Nails", 2.00, 500, Item.ItemType.REGULAR);
         System.out.println(cart.formatTicket());
     }
 
@@ -34,7 +35,7 @@ public class ShoppingCart {
      * @param type     item type
      * @throws IllegalArgumentException if some value is wrong
      */
-    public void addItem(String title, double price, int quantity, ItemType type) {
+    public void addItem(String title, double price, int quantity, Item.ItemType type) {
         if (title == null || title.length() == 0 || title.length() > 32)
             throw new IllegalArgumentException("Illegal title");
         if (price < 0.01)
@@ -42,10 +43,10 @@ public class ShoppingCart {
         if (quantity <= 0)
             throw new IllegalArgumentException("Illegal quantity");
         Item item = new Item();
-        item.title = title;
-        item.price = price;
-        item.quantity = quantity;
-        item.type = type;
+        item.setTitle(title);
+        item.setPrice(price);
+        item.setQuantity(quantity);
+        item.setType(type);
         items.add(item);
     }
 
@@ -75,13 +76,13 @@ public class ShoppingCart {
         double total = 0.00;
         int index = 0;
         for (Item item : items) {
-            int discount = calculateDiscount(item.type, item.quantity);
-            double itemTotal = item.price * item.quantity * (100.00 - discount) / 100.00;
+            int discount = calculateDiscount(item.getType(), item.getQuantity());
+            double itemTotal = item.getPrice() * item.getQuantity() * (100.00 - discount) / 100.00;
             lines.add(new String[]{
                     String.valueOf(++index),
-                    item.title,
-                    MONEY.format(item.price),
-                    String.valueOf(item.quantity),
+                    item.getTitle(),
+                    MONEY.format(item.getPrice()),
+                    String.valueOf(item.getQuantity()),
                     (discount == 0) ? "-" : (String.valueOf(discount) + "%"),
                     MONEY.format(itemTotal)
             });
@@ -168,7 +169,7 @@ public class ShoppingCart {
      * For each full 10 not NEW items item gets additional 1% discount,
      * but not more than 80% total
      */
-    public static int calculateDiscount(ItemType type, int quantity) {
+    public static int calculateDiscount(Item.ItemType type, int quantity) {
         int discount = 0;
         switch (type) {
             case NEW:
@@ -184,26 +185,10 @@ public class ShoppingCart {
                 discount = 70;
                 break;
         }
-        if (discount < 80) {
-            discount += quantity / 10;
-            if (discount > 80)
-                discount = 80;
-        }
+        discount += quantity / 10;
+        if (discount > 80)
+            discount = 80;
         return discount;
     }
 
-    /**
-     * item info
-     */
-    private static class Item {
-        String title;
-        double price;
-        int quantity;
-        ItemType type;
-    }
-
-    /**
-     * Container for added items
-     */
-    private List<Item> items = new ArrayList<Item>();
 }
