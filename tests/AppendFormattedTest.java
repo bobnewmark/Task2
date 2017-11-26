@@ -2,6 +2,7 @@ import org.junit.Before;
 import org.junit.Test;
 import symonenko.task2.Item;
 import symonenko.task2.ShoppingCart;
+import symonenko.task2.Ticket;
 
 public class AppendFormattedTest extends junit.framework.TestCase {
 
@@ -38,24 +39,24 @@ public class AppendFormattedTest extends junit.framework.TestCase {
         String quantity = "5";
         String discount = "-";
         String total = "$4.95";
-        ShoppingCart.appendFormatted(sb, number, -1, number.length());
+        Ticket.appendFormatted(sb, number, -1, number.length());
         assertEquals("1 ", sb.toString());
-        ShoppingCart.appendFormatted(sb, itemName, 1, itemName.length());
+        Ticket.appendFormatted(sb, itemName, 1, itemName.length());
         assertEquals("1 Apple ", sb.toString());
-        ShoppingCart.appendFormatted(sb, price, 1, price.length());
+        Ticket.appendFormatted(sb, price, 1, price.length());
         assertEquals("1 Apple $.99 ", sb.toString());
-        ShoppingCart.appendFormatted(sb, quantity, 1, quantity.length());
+        Ticket.appendFormatted(sb, quantity, 1, quantity.length());
         assertEquals("1 Apple $.99 5 ", sb.toString());
-        ShoppingCart.appendFormatted(sb, discount, 1, discount.length());
+        Ticket.appendFormatted(sb, discount, 1, discount.length());
         assertEquals("1 Apple $.99 5 - ", sb.toString());
-        ShoppingCart.appendFormatted(sb, total, 1, total.length());
+        Ticket.appendFormatted(sb, total, 1, total.length());
         assertEquals("1 Apple $.99 5 - $4.95 ", sb.toString());
     }
 
     @Test
     public void testAppendToLeft() {
         StringBuilder sb = new StringBuilder();
-        ShoppingCart.appendFormatted(sb, "left", -1, 10);
+        Ticket.appendFormatted(sb, "left", -1, 10);
         assertEquals(11, sb.toString().length());
         assertEquals(true, sb.toString().startsWith("left"));
         assertEquals(true, sb.toString().endsWith("     "));
@@ -64,7 +65,7 @@ public class AppendFormattedTest extends junit.framework.TestCase {
     @Test
     public void testAppendToRight() {
         StringBuilder sb = new StringBuilder();
-        ShoppingCart.appendFormatted(sb, "right", 1, 10);
+        Ticket.appendFormatted(sb, "right", 1, 10);
         assertEquals(11, sb.toString().length());
         assertEquals(true, sb.toString().endsWith("right "));
         assertEquals(true, sb.toString().startsWith("    "));
