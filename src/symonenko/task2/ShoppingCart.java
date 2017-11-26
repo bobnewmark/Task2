@@ -12,19 +12,7 @@ public class ShoppingCart {
      * Container for added items
      */
     private List<Item> items = new ArrayList<>();
-
-    /**
-     * Tests all class methods.
-     */
-    public static void main(String[] args) {
-// TODO: add tests here
-        ShoppingCart cart = new ShoppingCart();
-        cart.addItem("Apple", 0.99, 5, Item.ItemType.NEW);
-        cart.addItem("Banana", 20.00, 4, Item.ItemType.SECOND_FREE);
-        cart.addItem("A long piece of toilet paper", 17.20, 1, Item.ItemType.SALE);
-        cart.addItem("Nails", 2.00, 500, Item.ItemType.REGULAR);
-        System.out.println(cart.formatTicket());
-    }
+    private Ticket ticket;
 
     /**
      * Adds new item.
@@ -42,19 +30,15 @@ public class ShoppingCart {
             throw new IllegalArgumentException("Illegal price");
         if (quantity <= 0)
             throw new IllegalArgumentException("Illegal quantity");
-        Item item = new Item();
-        item.setTitle(title);
-        item.setPrice(price);
-        item.setQuantity(quantity);
-        item.setType(type);
-        items.add(item);
+        items.add(new Item(title, price, quantity, type));
     }
 
     /**
      * Gets shopping info in organized format.
      */
     public String formatTicket() {
-        return Ticket.getPrintedFormat(items);
+        ticket = new Ticket(items);
+        return ticket.getPrintedFormat();
     }
 
     /**

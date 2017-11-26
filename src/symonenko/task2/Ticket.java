@@ -8,8 +8,27 @@ import java.util.List;
 
 public class Ticket {
 
-    /* disabling creating instances of the class */
-    private Ticket() {}
+    // --- private section -----------------------------------------------------
+    private static final NumberFormat MONEY;
+    private List<Item> items;
+    private int[] align = new int[]{1, -1, 1, 1, 1, 1};
+    private String[] header = {"#", "Item", "Price", "Quan.", "Discount", "Total"};
+    private String[] footer;
+    private List<String[]> lines = new ArrayList<>();
+    private int[] width = new int[]{0, 0, 0, 0, 0, 0};
+    private int lineLength;
+    private StringBuilder sb = new StringBuilder();
+
+    static {
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator('.');
+        MONEY = new DecimalFormat("$#.00", symbols);
+    }
+
+    // constructor
+    public Ticket(List<Item> items) {
+        this.items = items;
+    }
 
     /**
      * Formats shopping price.
@@ -27,15 +46,65 @@ public class Ticket {
      * <p>
      * if no items in cart returns "No items." string.
      */
-    public static String getPrintedFormat(List<Item> items) {
-
+    public String getPrintedFormat() {
         if (items.size() == 0)
             return "No items.";
 
-        List<String[]> lines = new ArrayList<String[]>();
-        String[] header = {"#", "Item", "Price", "Quan.", "Discount", "Total"};
-        int[] align = new int[]{1, -1, 1, 1, 1, 1};
-// formatting each line
+        prepareLines();
+        countColumnLengths();
+        countLineLength();
+
+        formatHeader();
+        formatLines();
+        formatFooter();
+
+        return sb.toString();
+    }
+
+    // column max length
+    private void countColumnLengths() {
+        for (String[] line : lines)
+            for (int i = 0; i < line.length; i++)
+                width[i] = (int) Math.max(width[i], line[i].length());
+        for (int i = 0; i < header.length; i++)
+            width[i] = (int) Math.max(width[i], header[i].length());
+        for (int i = 0; i < footer.length; i++)
+            width[i] = (int) Math.max(width[i], footer[i].length());
+    }
+
+    // line length
+    private void countLineLength() {
+        lineLength = width.length - 1;
+        for (int w : width)
+            lineLength += w;
+    }
+
+    // header
+    private void formatHeader() {
+        for (int i = 0; i < header.length; i++)
+            appendFormatted(sb, header[i], align[i], width[i]);
+        sb.append("\n");
+        addSeparator(sb, lineLength);
+    }
+
+    // lines
+    private void formatLines() {
+        for (String[] line : lines) {
+            for (int i = 0; i < line.length; i++)
+                appendFormatted(sb, line[i], align[i], width[i]);
+            sb.append("\n");
+        }
+    }
+
+    // footer
+    private void formatFooter() {
+        addSeparator(sb, lineLength);
+        for (int i = 0; i < footer.length; i++)
+            appendFormatted(sb, footer[i], align[i], width[i]);
+    }
+
+    // formatting each line
+    private void prepareLines() {
         double total = 0.00;
         int index = 0;
         for (Item item : items) {
@@ -51,48 +120,14 @@ public class Ticket {
             });
             total += itemTotal;
         }
-        String[] footer = {String.valueOf(index), "", "", "", "",
-                MONEY.format(total)};
-// formatting table
-// column max length
-        int[] width = new int[]{0, 0, 0, 0, 0, 0};
-        for (String[] line : lines)
-            for (int i = 0; i < line.length; i++)
-                width[i] = (int) Math.max(width[i], line[i].length());
-        for (int i = 0; i < header.length; i++)
-            width[i] = (int) Math.max(width[i], header[i].length());
-        for (int i = 0; i < footer.length; i++)
-            width[i] = (int) Math.max(width[i], footer[i].length());
-// line length
-        int lineLength = width.length - 1;
-        for (int w : width)
-            lineLength += w;
-        StringBuilder sb = new StringBuilder();
-// header
-        for (int i = 0; i < header.length; i++)
-            appendFormatted(sb, header[i], align[i], width[i]);
-        sb.append("\n");
-// separator
+        footer = new String[]{String.valueOf(index), "", "", "", "", MONEY.format(total)};
+    }
+
+    // separator
+    private static void addSeparator(StringBuilder sb, int lineLength) {
         for (int i = 0; i < lineLength; i++)
             sb.append("-");
         sb.append("\n");
-// lines
-        for (String[] line : lines) {
-            for (int i = 0; i < line.length; i++)
-                appendFormatted(sb, line[i], align[i], width[i]);
-            sb.append("\n");
-        }
-        if (lines.size() > 0) {
-// separator
-            for (int i = 0; i < lineLength; i++)
-                sb.append("-");
-            sb.append("\n");
-        }
-// footer
-        for (int i = 0; i < footer.length; i++)
-            appendFormatted(sb, footer[i], align[i], width[i]);
-        return sb.toString();
-
     }
 
     /**
@@ -116,12 +151,5 @@ public class Ticket {
         sb.append(" ");
     }
 
-    // --- private section -----------------------------------------------------
-    private static final NumberFormat MONEY;
 
-    static {
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator('.');
-        MONEY = new DecimalFormat("$#.00", symbols);
-    }
 }

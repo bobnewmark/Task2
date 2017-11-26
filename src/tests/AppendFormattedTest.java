@@ -1,3 +1,5 @@
+package tests;
+
 import org.junit.Before;
 import org.junit.Test;
 import symonenko.task2.Item;
@@ -28,6 +30,11 @@ public class AppendFormattedTest extends junit.framework.TestCase {
                         "------------------------------------------------------------\n" +
                         "4                                                    $550.11 ",
                 cart.formatTicket());
+    }
+
+    @Test
+    public void testEmptyCartTicket() {
+        assertEquals("No items.", new ShoppingCart().formatTicket());
     }
 
     @Test
