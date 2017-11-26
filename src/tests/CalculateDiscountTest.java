@@ -34,7 +34,7 @@ public class CalculateDiscountTest {
                 /*---------- Discount for SECOND FREE type ----------*/
                 {0, Item.ItemType.SECOND_FREE,  1},
                 {50, Item.ItemType.SECOND_FREE,  9},
-                {51, Item.ItemType.SECOND_FREE,  15},
+                {52, Item.ItemType.SECOND_FREE,  25},
                 /*---------- Discount for NEW items tests ----------*/
                 {0, Item.ItemType.NEW,  1},
                 {0, Item.ItemType.NEW,  100},
