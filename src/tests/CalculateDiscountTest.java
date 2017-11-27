@@ -13,13 +13,11 @@ import java.util.Collection;
 @RunWith(Parameterized.class)
 public class CalculateDiscountTest {
 
-    private Item.ItemType type;
-    private int quantity;
+    private Item item;
     private int expected;
 
-    public CalculateDiscountTest(int expected, Item.ItemType type, int quantity) {
-        this.type = type;
-        this.quantity = quantity;
+    public CalculateDiscountTest(int expected, Item item) {
+        this.item = item;
         this.expected = expected;
     }
 
@@ -27,31 +25,31 @@ public class CalculateDiscountTest {
     public static Collection testData() {
         return Arrays.asList(new Object[][]{
                 /*---------- Discount for REGULAR type ----------*/
-                {0, Item.ItemType.REGULAR,  1},
-                {0, Item.ItemType.REGULAR,  9},
-                {1, Item.ItemType.REGULAR,  10},
-                {20, Item.ItemType.REGULAR,  200},
+                {0, new Item("", 1, 1, Item.ItemType.REGULAR)},
+                {0, new Item("", 1, 9, Item.ItemType.REGULAR)},
+                {1, new Item("", 1, 10, Item.ItemType.REGULAR)},
+                {20, new Item("", 1, 200, Item.ItemType.REGULAR)},
                 /*---------- Discount for SECOND FREE type ----------*/
-                {0, Item.ItemType.SECOND_FREE,  1},
-                {50, Item.ItemType.SECOND_FREE,  9},
-                {52, Item.ItemType.SECOND_FREE,  25},
+                {0, new Item("", 1, 1, Item.ItemType.SECOND_FREE)},
+                {50, new Item("", 1, 9, Item.ItemType.SECOND_FREE)},
+                {52, new Item("", 1, 25, Item.ItemType.SECOND_FREE)},
                 /*---------- Discount for NEW items tests ----------*/
-                {0, Item.ItemType.NEW,  1},
-                {0, Item.ItemType.NEW,  100},
+                {0, new Item("", 1, 1, Item.ItemType.NEW)},
+                {0, new Item("", 1, 100, Item.ItemType.NEW)},
                 /*---------- Discount for FOR SALE items ----------*/
-                { 70, Item.ItemType.SALE,  1},
-                { 72, Item.ItemType.SALE,  20},
-                { 75, Item.ItemType.SALE,  50},
-                { 80, Item.ItemType.SALE,  200},
+                { 70, new Item("", 1, 1, Item.ItemType.SALE)},
+                { 72, new Item("", 1, 20, Item.ItemType.SALE)},
+                { 75, new Item("", 1, 50, Item.ItemType.SALE)},
+                { 80, new Item("", 1, 200, Item.ItemType.SALE)},
                 /*---------- Max possible discount test ----------*/
-                { 80, Item.ItemType.SALE,  1000}
+                { 80, new Item("", 1, 1000, Item.ItemType.SALE)}
         });
     }
 
     @Test
     public void discountTest()
     {
-        Assert.assertEquals(expected, ShoppingCart.calculateDiscount(type, quantity));
+        Assert.assertEquals(expected, item.calculateDiscount());
     }
 
 }

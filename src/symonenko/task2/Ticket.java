@@ -108,7 +108,7 @@ public class Ticket {
         double total = 0.00;
         int index = 0;
         for (Item item : items) {
-            int discount = ShoppingCart.calculateDiscount(item.getType(), item.getQuantity());
+            int discount = item.calculateDiscount();
             double itemTotal = item.getPrice() * item.getQuantity() * (100.00 - discount) / 100.00;
             lines.add(new String[]{
                     String.valueOf(++index),
