@@ -6,16 +6,15 @@ public class Item {
     private int quantity;
     private ItemType type;
 
-    public enum ItemType { NEW, REGULAR, SECOND_FREE, SALE };
+    public enum ItemType { NEW, REGULAR, SECOND_FREE, SALE }
 
     public Item(String title, double price, int quantity, ItemType type) {
         setTitle(title);
         setPrice(price);
         setQuantity(quantity);
         setType(type);
+        checkItem();
     }
-
-    public Item() {}
 
     /**
      * Calculates item's discount.
@@ -45,6 +44,18 @@ public class Item {
         if (discount > 80)
             discount = 80;
         return discount;
+    }
+
+    /**
+     * Checks if item fields have correct values
+     */
+    private void checkItem() {
+        if (title == null || title.length() == 0 || title.length() > 32)
+            throw new IllegalArgumentException("Illegal title");
+        if (price < 0.01)
+            throw new IllegalArgumentException("Illegal price");
+        if (quantity <= 0)
+            throw new IllegalArgumentException("Illegal quantity");
     }
 
     public String getTitle() {

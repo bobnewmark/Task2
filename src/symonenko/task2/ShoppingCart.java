@@ -24,12 +24,6 @@ public class ShoppingCart {
      * @throws IllegalArgumentException if some value is wrong
      */
     public void addItem(String title, double price, int quantity, Item.ItemType type) {
-        if (title == null || title.length() == 0 || title.length() > 32)
-            throw new IllegalArgumentException("Illegal title");
-        if (price < 0.01)
-            throw new IllegalArgumentException("Illegal price");
-        if (quantity <= 0)
-            throw new IllegalArgumentException("Illegal quantity");
         items.add(new Item(title, price, quantity, type));
     }
 
@@ -40,6 +34,5 @@ public class ShoppingCart {
         ticket = new Ticket(items);
         return ticket.getPrintedFormat();
     }
-
 
 }
